@@ -1,62 +1,78 @@
 "use strict";
 
-module.exports =  class FieldsValidator {
+(function() {
 
-    empty(value)
-    {
-        return value.length <= 0;
+    class FieldsValidator {
+
+        empty(value)
+        {
+            return value.length <= 0;
+        }
+
+        minLength(value, minLength)
+        {
+            return minLength > value.length;
+        }
+
+        maxLength(value, maxLength)
+        {
+            return value.length > maxLength;
+        }
+
+        beforeDate(year, month, day)
+        {
+            let expirationDay = day || 1;
+            let expirationDate = new Date(year, month, expirationDay);
+            let currentDate = new Date();
+            return expirationDate.getTime() <= currentDate.getTime();
+        }
+
+        validateEmail(value)
+        {
+            let emailRegEx =  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+            return !emailRegEx.test(value);
+        }
+
+        isNotChecked(field)
+        {
+            return !field.checked;
+        }
+
+        isDateInFuture(value)
+        {
+            let birthDate = new Date(value);
+            return new Date() < new Date(birthDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+        }
+
+        isNotEqual(firtsValue, secondValude)
+        {
+            return firtsValue !== secondValude;
+        }
+
+        username(value)
+        {
+            let regularExpression = /[\~\!\@\#\$\%\&\*\(\)\{\}\[\]\\\|\/\?\>\<]/;
+            return value.search(regularExpression) != -1 ||
+                /^(_)\1/.test(value) ||
+                /^(-)\1/.test(value);
+        }
+
+        startWithDigit(value)
+        {
+            return /^\d/.test(value);
+        }
     }
 
-    minLength(value, minLength)
-    {
-        return minLength > value.length;
-    }
+    if ((typeof module != 'undefined') && (module.exports)) { // Node Module
 
-    maxLength(value, maxLength)
-    {
-        return value.length > maxLength;
-    }
+        module.exports = FieldsValidator;
 
-    beforeDate(year, month, day)
-    {
-        let expirationDay = day || 1;
-        let expirationDate = new Date(year, month, expirationDay);
-        let currentDate = new Date();
-        return expirationDate.getTime() <= currentDate.getTime();
     }
+    else if (typeof window != 'undefined') { // Fall back to attaching to window
 
-    validateEmail(value)
-    {
-        let emailRegEx =  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
-        return !emailRegEx.test(value);
-    }
+        window.G4 = typeof G4 != "undefined" ? G4 : {};
+        window.G4.FieldsValidator = FieldsValidator;
 
-    isNotChecked(field)
-    {
-        return !field.checked;
-    }
+    };
 
-    isDateInFuture(value)
-    {
-        let birthDate = new Date(value);
-        return new Date() < new Date(birthDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
-    }
-
-    isNotEqual(firtsValue, secondValude)
-    {
-        return firtsValue !== secondValude;
-    }
-
-    username(value)
-    {
-        let regularExpression = /[\~\!\@\#\$\%\&\*\(\)\{\}\[\]\\\|\/\?\>\<]/;
-        return value.search(regularExpression) != -1 ||
-            /^(_)\1/.test(value) ||
-            /^(-)\1/.test(value);
-    }
-
-    startWithDigit(value)
-    {
-        return /^\d/.test(value);
-    }
-}
+}).call(this);
