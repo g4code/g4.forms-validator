@@ -17,6 +17,7 @@
 <body>
 <h1>Demo</h1>
 <form id="js_form1">
+    <div class="js_error_messages_holder"></div>
     <div>
         <input name="username" placeholder="username">
     </div>
@@ -37,7 +38,7 @@ class TestForm1 {
 
     constructor () {
         this.validator     = new G4.FieldsValidator()
-        this.formError     = new G4.FormsErrors(FORM_SELECTOR)
+        this.formError     = new G4.FormsErrors(FORM_SELECTOR).groupMessages()
         document.querySelector(FORM_SELECTOR).addEventListener("submit", this.onSubmit.bind(this))
     }
 
@@ -45,19 +46,19 @@ class TestForm1 {
         return [
             new G4.Rule('username')
                 .addRule((value) => {return this.validator.minLength(value, 3)})
-                .addError((value) => {this.formError.addError('Min length is 3', 'username')}),
+                .addError((value) => {this.formError.addError('Username min length is 3', 'username')}),
             new G4.Rule('username')
                 .addRule((value) => {return this.validator.maxLength(value, 6)})
-                .addError((value) => {this.formError.addError('Max length is 6', 'username')}),
+                .addError((value) => {this.formError.addError('Username max length is 6', 'username')}),
+            new G4.Rule('username')
+                .addRule((value) => {return this.validator.username(value)})
+                .addError((value) => {this.formError.addError('Wrong username format', 'username')}),
             new G4.Rule('desc')
                 .addRule((value) => {return this.validator.empty(value)})
                 .addError((value) => {this.formError.addError('Desc is required', 'desc')}),
             new G4.Rule('email')
                 .addRule((value) => {return this.validator.validateEmail(value)})
                 .addError((value) => {this.formError.addError('Wrong email', 'email')}),
-            new G4.Rule('username')
-                .addRule((value) => {return this.validator.username(value)})
-                .addError((value) => {this.formError.addError('Wrong username', 'username')})
         ]
     }
 
