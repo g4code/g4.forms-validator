@@ -9,7 +9,7 @@
             display: block;
         }
     </style>
-    <script src="../src/forms-validator.js?v=0.0.0"></script>
+    <script src="../src/forms-validator.js?v=0.0.1"></script>
     <script src="../src/fields-validator.js"></script>
     <script src="../src/rule.js"></script>
     <script src="../src/forms-errors.js"></script>
@@ -45,6 +45,9 @@ class TestForm1 {
     getRules () {
         return [
             new G4.Rule('username')
+                .addRule((value) => {return this.validator.empty(value)})
+                .addError((value) => {this.formError.addError('Username is required', 'username')}),
+            new G4.Rule('username')
                 .addRule((value) => {return this.validator.minLength(value, 3)})
                 .addError((value) => {this.formError.addError('Username min length is 3', 'username')}),
             new G4.Rule('username')
@@ -67,6 +70,7 @@ class TestForm1 {
         event.preventDefault();
         let formValidator = new G4.FormValidator(FORM_SELECTOR)
             .addFieldRules(this.getRules())
+            .enableAllRulesErrors()
 
         console.log('Form is valid: ' + formValidator.isValid())
 
@@ -77,5 +81,11 @@ class TestForm1 {
 new TestForm1()
 
 </script>
+
+
+
+
+
+
 </body>
 </html>

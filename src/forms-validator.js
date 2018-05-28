@@ -7,7 +7,9 @@
         constructor (formSelector) {
             this.formSelector = formSelector
             this.fieldRules = []
+            this.invalidFields = []
             this.isValidFields = true
+            this.oneRuleError = true
         }
 
         addFieldRules (fields) {
@@ -35,14 +37,20 @@
 
         executeSingleRule (rule) {
             let fieldEl = this.getField(this.formSelector, rule.fieldSelector)
+
             if (fieldEl === null) {
                 console.log(`Error: Field ${ rule.fieldSelector } not exist`);
-                return false;
+                return false
             }
+
+            if (this.oneRuleError && this.ifFieldAlreadyHasError(rule.fieldSelector)) {
+                return false
+            }
+
             let fieldValue = fieldEl.value
-            let hasError = rule.rule.call(this, fieldValue)
-            if(hasError){
+            if(rule.rule.call(this, fieldValue)){
                 this.isValidFields = false
+                this.invalidFields.push(rule.fieldSelector)
                 rule.error.call(this, fieldValue)
             }
         }
@@ -52,6 +60,16 @@
             document.querySelectorAll(this.formSelector + ' .js_error_message').forEach(function(element) {
                 element.remove()
             });
+        }
+
+        ifFieldAlreadyHasError (fieldName) {
+            let res = this.invalidFields.find( name => {return name === fieldName})
+            return  res != undefined
+        }
+
+        enableAllRulesErrors () {
+            this.oneRuleError = false
+            return this
         }
 
     }
