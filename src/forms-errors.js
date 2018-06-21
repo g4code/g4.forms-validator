@@ -15,9 +15,12 @@
                 console.log(`Error: While createing Error. Field ${ fieldName } not exist.`);
                 return false;
             }
-            this.messagePosition === 'ABOVE'
-                ? this.inserMessage(message, field)
-                : this.addToGroup(message, field)
+
+            if(this.messagePosition === 'GROUP'){
+                this.addToGroup(message, field)
+            }
+
+            this.inserMessage(message, field)
         }
 
         addToGroup (message) {

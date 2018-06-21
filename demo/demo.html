@@ -7,7 +7,18 @@
         .error_message {
             color:red;
             display: block;
+            /*padding: 10px;*/
         }
+
+        .error_messages_holder {
+            background: #ffeff5;
+            text-align: center;
+        }
+
+        .has_error input{
+            border: 1px solid red;
+        }
+
     </style>
     <script src="../src/forms-validator.js?v=0.0.1"></script>
     <script src="../src/fields-validator.js"></script>
@@ -17,7 +28,7 @@
 <body>
 <h1>Demo</h1>
 <form id="js_form1">
-    <div class="js_error_messages_holder"></div>
+    <div class="js_error_messages_holder error_messages_holder"></div>
     <div>
         <input name="username" placeholder="username">
     </div>
@@ -44,9 +55,6 @@ class TestForm1 {
 
     getRules () {
         return [
-            new G4.Rule('username')
-                .addRule((value) => {return this.validator.empty(value)})
-                .addError((value) => {this.formError.addError('Username is required', 'username')}),
             new G4.Rule('username')
                 .addRule((value) => {return this.validator.minLength(value, 3)})
                 .addError((value) => {this.formError.addError('Username min length is 3', 'username')}),
