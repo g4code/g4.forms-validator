@@ -1,6 +1,6 @@
 {
   "name": "g4.forms-validator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Forms validator",
   "main": "./src/forms-validator.js",
   "scripts": {
