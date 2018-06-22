@@ -57,9 +57,8 @@
 
         resetErrors() {
             this.isValidFields = true
-            document.querySelectorAll(this.formSelector + ' .js_error_message').forEach(function(element) {
-                element.remove()
-            });
+            document.querySelectorAll(this.formSelector + ' .js_error_message').forEach((element) => { element.remove() });
+            document.querySelectorAll(this.formSelector + ' .has_error').forEach((element) => { element.classList.remove('has_error') });
         }
 
         ifFieldAlreadyHasError (fieldName) {
